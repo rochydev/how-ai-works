@@ -66,6 +66,9 @@ experience.screen = new ScreenOS(desk.screenMesh, experience.state);
 const hud = new Hud(document.getElementById('hud'), experience.state, experience);
 experience.attachHud(hud);
 
+// Browsers only allow audio after a gesture: the first click or key anywhere starts it
+for (const type of ['pointerdown', 'keydown']) addEventListener(type, () => audio.unlock(), { once: true });
+
 for (const sys of [room, leds, desk, props, particles, character]) engine.onUpdate(sys.update);
 engine.onUpdate((dt, t) => director.update(dt, t));
 engine.onUpdate((dt, t) => experience.update(dt, t));

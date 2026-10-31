@@ -10,6 +10,8 @@ const ICONS = {
   restart: '<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/></svg>',
   soundOn: '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>',
   soundOff: '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM17 9l5 6M22 9l-5 6"/></svg>',
+  musicOn: '<svg viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>',
+  musicOff: '<svg viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/><path d="M3 3l18 18"/></svg>',
   send: '<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
   github: '<svg viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>',
 };
@@ -40,6 +42,7 @@ export class Hud {
         </div>
         <div class="top-actions">
           <div class="views" role="group" aria-label="camera"></div>
+          <button class="icon-btn" data-action="music" aria-label="music"></button>
           <button class="icon-btn" data-action="sound" aria-label="sound"></button>
           <div class="lang" role="group" aria-label="language">
             <button data-lang="es">ES</button><button data-lang="en">EN</button>
@@ -99,6 +102,7 @@ export class Hud {
         if (a === 'play') api.togglePlay();
         if (a === 'restart') api.restart();
         if (a === 'sound') api.toggleSound();
+        if (a === 'music') api.toggleMusic();
       }
       if (btn.dataset.step) api.goto(Number(btn.dataset.step));
       if (btn.dataset.lang) api.setLang(btn.dataset.lang);
@@ -186,6 +190,10 @@ export class Hud {
       .join('');
     this.$('[data-action="sound"]').innerHTML = s.sound ? ICONS.soundOn : ICONS.soundOff;
     this.$('[data-action="sound"]').setAttribute('aria-pressed', String(s.sound));
+    this.$('[data-action="sound"]').title = S.sound;
+    this.$('[data-action="music"]').innerHTML = s.music ? ICONS.musicOn : ICONS.musicOff;
+    this.$('[data-action="music"]').setAttribute('aria-pressed', String(s.music));
+    this.$('[data-action="music"]').title = S.music;
     this.root.querySelectorAll('[data-lang]').forEach((b) => b.classList.toggle('on', b.dataset.lang === s.lang));
     this.root.querySelectorAll('[data-speed]').forEach((b) => b.classList.toggle('on', Number(b.dataset.speed) === s.speed));
     this.$('[data-action="play"]').innerHTML = s.playing ? ICONS.pause : ICONS.play;

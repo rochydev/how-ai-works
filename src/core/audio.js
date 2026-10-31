@@ -1,17 +1,30 @@
+import { Music } from './music.js';
+
+const stored = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+const store = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* storage unavailable */
+  }
+};
+
 /**
  * Tiny synthesized soundscape (no audio files): mechanical key clicks,
- * a soft rain + synth pad ambience, whooshes between stages and blips
- * for every generated token.
+ * rain on the window, generative lo-fi music, whooshes between stages and
+ * blips for every generated token.
  */
 export class Audio {
   constructor() {
     this.ctx = null;
-    this.enabled = true;
-    try {
-      this.enabled = localStorage.getItem('haw-sound') !== 'off';
-    } catch {
-      /* storage unavailable */
-    }
+    this.enabled = stored('haw-sound') !== 'off';
+    this.musicEnabled = stored('haw-music') !== 'off';
   }
 
   /** Must be called from a user gesture. */
@@ -28,16 +41,24 @@ export class Audio {
     this.master.connect(this.ctx.destination);
     this.noise = this.makeNoise();
     this.startAmbience();
+    this.music = new Music(this.ctx, this.master, this.noise);
+    if (this.enabled && this.musicEnabled) this.music.start();
   }
 
   setEnabled(on) {
     this.enabled = on;
-    try {
-      localStorage.setItem('haw-sound', on ? 'on' : 'off');
-    } catch {
-      /* storage unavailable */
-    }
+    store('haw-sound', on ? 'on' : 'off');
     if (this.master) this.master.gain.setTargetAtTime(on ? 0.8 : 0, this.ctx.currentTime, 0.1);
+    // no point scheduling notes nobody can hear
+    if (this.music) on && this.musicEnabled ? this.music.start() : this.music.stop();
+  }
+
+  setMusic(on) {
+    this.musicEnabled = on;
+    store('haw-music', on ? 'on' : 'off');
+    if (!this.music) return;
+    if (on && this.enabled) this.music.start();
+    else this.music.stop();
   }
 
   makeNoise() {
@@ -61,36 +82,6 @@ export class Audio {
     rg.gain.value = 0.035;
     rain.connect(lp).connect(rg).connect(this.master);
     rain.start();
-    // warm pad
-    const pad = c.createGain();
-    pad.gain.value = 0.0;
-    pad.gain.setTargetAtTime(0.03, c.currentTime, 3);
-    const filter = c.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 520;
-    filter.Q.value = 2;
-    pad.connect(filter).connect(this.master);
-    for (const [f, det] of [
-      [110, -7],
-      [164.81, 5],
-      [220, 3],
-      [277.18, -4],
-    ]) {
-      const o = c.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.value = f;
-      o.detune.value = det;
-      const g = c.createGain();
-      g.gain.value = 0.25;
-      o.connect(g).connect(pad);
-      o.start();
-    }
-    const lfo = c.createOscillator();
-    lfo.frequency.value = 0.07;
-    const lfoGain = c.createGain();
-    lfoGain.gain.value = 180;
-    lfo.connect(lfoGain).connect(filter.frequency);
-    lfo.start();
   }
 
   key() {
