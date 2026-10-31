@@ -50,12 +50,16 @@ export class Pipeline {
     if (this.cache.has(key)) return this.cache.get(key);
     const r = seeded(this.seed + cursor * 7919 + this.generated.length * 31);
     const truth = this.planned[Math.min(cursor, this.planned.length - 1)];
+    const prev = this.generated[this.generated.length - 1];
+    // Finishing a word ("predec" → "ir") is almost deterministic in real models
+    const continuation = prev && /\p{L}$/u.test(prev.text) && /^\p{L}/u.test(truth.text);
     const pool = [
       ...DISTRACTORS[this.lang],
-      ...this.planned.slice(cursor + 1, cursor + 8).map((t) => t.text),
+      ...this.planned.slice(cursor + 1, cursor + 10).map((t) => t.text).filter((t) => /^[\s\p{P}]/u.test(t)),
     ];
     const seen = new Set([truth.text]);
-    const list = [{ ...truth, truth: true, logit: 7 + r() * 0.8 }];
+    const truthLogit = continuation ? 9.5 : cursor === 0 ? 6 + r() * 0.4 : 7.2 + r() * 0.6;
+    const list = [{ ...truth, truth: true, logit: truthLogit }];
     const base = [4.3, 3.7, 3.2, 2.7, 2.3];
     let guard = 0;
     while (list.length < TOP_K && guard++ < 200) {
