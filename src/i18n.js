@@ -73,7 +73,7 @@ export const STRINGS = {
       you: 'Tú',
       assistant: 'Asistente',
       sent: 'enviado',
-      chat: 'chat',
+      chat: 'Chat',
     },
     stages: {
       prompt: {
@@ -201,7 +201,7 @@ export const STRINGS = {
       you: 'You',
       assistant: 'Assistant',
       sent: 'sent',
-      chat: 'chat',
+      chat: 'Chat',
     },
     stages: {
       prompt: {

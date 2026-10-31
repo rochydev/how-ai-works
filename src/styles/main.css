@@ -1,16 +1,20 @@
 :root {
-  --bg: #0c0b0d;
-  --ink: #ede8df;
-  --ink-dim: #a39e94;
-  --ink-faint: #6d6961;
-  --accent: #e8a25a;
-  --line: rgba(237, 232, 223, 0.14);
-  --line-strong: rgba(237, 232, 223, 0.32);
-  --surface: rgba(14, 13, 16, 0.84);
-  --surface-solid: #141316;
-  --serif: 'Instrument Serif', 'Times New Roman', serif;
-  --sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
-  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --bg: #000000;
+  --ink: #f5f5f7;
+  --ink-dim: rgba(235, 235, 245, 0.62);
+  --ink-faint: rgba(235, 235, 245, 0.32);
+  --accent: #0a84ff;
+  --sep: rgba(255, 255, 255, 0.1);
+  --control: rgba(255, 255, 255, 0.1);
+  --control-hover: rgba(255, 255, 255, 0.16);
+  /* macOS dark "vibrancy" materials */
+  --material: rgba(40, 40, 44, 0.6);
+  --material-thick: rgba(36, 36, 40, 0.78);
+  --blur: blur(30px) saturate(180%);
+  --window-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.7), inset 0 0.5px 0 rgba(255, 255, 255, 0.14), 0 22px 60px rgba(0, 0, 0, 0.5);
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Helvetica Neue', sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, 'Roboto Mono', monospace;
 }
 
 * {
@@ -40,12 +44,13 @@ body {
   touch-action: none;
 }
 
+/* boot screen, the way a Mac starts up */
 #loader {
   position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
-  background: var(--bg);
+  background: #000;
   z-index: 100;
   transition: opacity 0.8s ease, visibility 0.8s;
 }
@@ -56,24 +61,22 @@ body {
 }
 
 .loader-inner {
-  text-align: center;
+  display: grid;
+  justify-items: center;
 }
 
 .loader-logo {
-  font-family: var(--serif);
-  font-size: 40px;
-  letter-spacing: -0.01em;
-}
-
-.loader-logo em {
-  color: var(--accent);
+  width: 72px;
+  height: 72px;
+  color: var(--ink);
 }
 
 .loader-bar {
-  width: 200px;
-  height: 1px;
-  margin: 20px auto 14px;
-  background: var(--line);
+  width: 180px;
+  height: 5px;
+  margin-top: 48px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.22);
   overflow: hidden;
 }
 
@@ -81,14 +84,7 @@ body {
   display: block;
   height: 100%;
   width: 0;
+  border-radius: 3px;
   background: var(--ink);
   transition: width 0.3s ease;
-}
-
-.loader-text {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
 }

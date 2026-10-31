@@ -83,7 +83,9 @@ Vídeo del recorrido completo (para redes): [`docs/video/walkthrough-es.webm`](d
 - **Three.js r169** (WebGL) + post-procesado `UnrealBloomPass` para el neón.
 - **Vite 5**, JavaScript vanilla con módulos ES. Sin frameworks ni assets: **todo es procedural**
   (geometría, texturas en canvas, música y sonido con WebAudio).
-- Tipografía: **Instrument Serif**, **IBM Plex Sans** e **IBM Plex Mono** (Google Fonts).
+- Interfaz al estilo **macOS**: barra de menús, ventanas con semáforos, buscador tipo Spotlight y
+  línea de tiempo tipo Dock. Tipografía **SF Pro / SF Mono** en Apple, con **Inter** y **Roboto Mono**
+  como alternativa en el resto de sistemas.
 - **Playwright-core** solo para generar las capturas y el vídeo de la documentación.
 
 ```
@@ -110,7 +112,7 @@ src/
 │   ├── experience.js  el director de orquesta: estado, autoplay, generación, picking UV
 │   ├── audio.js       efectos y ambiente 100 % sintetizados
 │   └── music.js       música lo-fi generativa (FM, reverb, delay, batería)
-└── ui/hud.js      HUD en HTML/CSS
+└── ui/hud.js      HUD en HTML/CSS (estilo macOS)
 ```
 
 Detalles que quizá te interesen:
