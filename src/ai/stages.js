@@ -14,7 +14,7 @@ export const STAGES = [
   { id: 'logits', shot: 'screen', mood: 'thinking', holo: null, duration: 10 },
   { id: 'sampling', shot: 'screen', mood: 'thinking', holo: null, duration: 7 },
   { id: 'generate', shot: 'shoulder', mood: 'answer', holo: 'stream', duration: 0 },
-  { id: 'answer', shot: 'room', mood: 'idle', holo: null, duration: 0 },
+  { id: 'answer', shot: 'screen', mood: 'idle', holo: null, duration: 0 },
 ];
 
 export const stageIndex = (id) => STAGES.findIndex((s) => s.id === id);
