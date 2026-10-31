@@ -182,8 +182,8 @@ export function neonSignTexture(text, sub) {
       g.fillText(str, w / 2, y);
       g.globalAlpha = 1;
     };
-    draw(text, h * 0.42, "italic 700 150px 'Space Grotesk', sans-serif", '#ff4fd8');
-    if (sub) draw(sub, h * 0.82, "600 50px 'JetBrains Mono', monospace", '#25f4ee');
+    draw(text, h * 0.42, "italic 400 190px 'Instrument Serif', serif", '#ff4fd8');
+    if (sub) draw(sub, h * 0.82, "500 46px 'IBM Plex Mono', monospace", '#25f4ee');
   });
 }
 
@@ -194,9 +194,9 @@ export function posterTexture(kind) {
       g.fillStyle = '#f2ead8';
       g.fillRect(0, 0, w, h);
       g.fillStyle = '#16122a';
-      g.font = "800 64px 'Space Grotesk', sans-serif";
+      g.font = "400 76px 'Instrument Serif', serif";
       g.textAlign = 'left';
-      ['ATTENTION', 'IS ALL', 'YOU NEED'].forEach((l, i) => g.fillText(l, 36, 120 + i * 70));
+      ['Attention', 'is all', 'you need.'].forEach((l, i) => g.fillText(l, 36, 120 + i * 70));
       // attention-like arcs
       for (let i = 0; i < 26; i++) {
         g.strokeStyle = `rgba(${120 + r() * 130},${40 + r() * 60},${200 + r() * 55},${0.25 + r() * 0.5})`;
@@ -210,7 +210,7 @@ export function posterTexture(kind) {
       }
       g.fillStyle = '#16122a';
       for (let i = 0; i < 10; i++) g.fillRect(48 + i * 44, 626, 30, 30);
-      g.font = "500 20px 'JetBrains Mono', monospace";
+      g.font = "500 20px 'IBM Plex Mono', monospace";
       g.fillText('Q · Kᵀ / √d', 36, 360);
     } else if (kind === 'synth') {
       const sky = g.createLinearGradient(0, 0, 0, h);
@@ -244,13 +244,13 @@ export function posterTexture(kind) {
         g.stroke();
       }
       g.fillStyle = '#ffffff';
-      g.font = "700 46px 'Space Grotesk', sans-serif";
+      g.font = "italic 400 64px 'Instrument Serif', serif";
       g.textAlign = 'center';
-      g.fillText('NEXT TOKEN', w / 2, 90);
+      g.fillText('next token', w / 2, 96);
     } else {
       g.fillStyle = '#0b0b14';
       g.fillRect(0, 0, w, h);
-      g.font = "600 30px 'JetBrains Mono', monospace";
+      g.font = "600 30px 'IBM Plex Mono', monospace";
       g.textAlign = 'center';
       const rows = ['01101000', '01101111', '01101100', '01100001'];
       rows.forEach((row, i) => {
@@ -258,9 +258,9 @@ export function posterTexture(kind) {
         g.fillText(row, w / 2, 160 + i * 70);
       });
       g.fillStyle = '#ffffff';
-      g.font = "800 72px 'Space Grotesk', sans-serif";
+      g.font = "700 72px 'IBM Plex Sans', sans-serif";
       g.fillText('hola', w / 2, 520);
-      g.font = "400 22px 'JetBrains Mono', monospace";
+      g.font = "400 22px 'IBM Plex Mono', monospace";
       g.fillStyle = '#a29fc4';
       g.fillText('= [70, 8083]', w / 2, 580);
     }

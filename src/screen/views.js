@@ -168,7 +168,7 @@ export function viewIds(g, R, s) {
     strokeRR(g, x, y, w, cardH, 10, withAlpha(col, active ? 1 : 0.5), active ? 2.5 : 1.5);
     text(g, label, x + w / 2, y + size * 1.3, { size, family: MONO, weight: 600, align: 'center' });
     const shownId = k < 1 ? Math.floor(t.id * k + seeded(i + Math.floor(st * 20))() * 900 * (1 - k)) : t.id;
-    text(g, String(shownId), x + w / 2, y + size * 2.9, { size: size + 2, family: MONO, weight: 800, color: C.cyan, align: 'center' });
+    text(g, String(shownId), x + w / 2, y + size * 2.9, { size: size + 2, family: MONO, weight: 700, color: C.cyan, align: 'center' });
     x += w + 12;
   });
 
@@ -410,7 +410,7 @@ export function viewAttention(g, R, s, hit) {
     const label = showToken(p.tokens[i].text).slice(0, 12);
     const isF = i === focus;
     const size = Math.min(22, rowH * 0.5);
-    text(g, label, qx, y + rowH * 0.62, { size, family: MONO, weight: isF ? 800 : 500, color: isF ? C.cyan : C.ink, align: 'right' });
+    text(g, label, qx, y + rowH * 0.62, { size, family: MONO, weight: isF ? 700 : 500, color: isF ? C.cyan : C.ink, align: 'right' });
     hit({ x: L.x, y, w: 180, h: rowH, onHover: () => s.actions.setFocus(i) });
     const w = focus != null && i <= focus ? W[focus][i] : 0;
     text(g, label, kx, y + rowH * 0.62, { size, family: MONO, weight: 500, color: w > 0.15 ? C.ink : C.dim });
@@ -477,7 +477,7 @@ export function viewLayers(g, R, s) {
     text(g, `${s.S.screen.layer} ${l + 1}`, left + width + 24, y + blockH / 2 + 8, {
       size: 22,
       family: MONO,
-      weight: active ? 800 : 400,
+      weight: active ? 700 : 400,
       color: active ? C.ink : C.dim,
     });
   }
@@ -556,7 +556,7 @@ export function viewLogits(g, R, s) {
     fillRR(g, R.x + labelW, y + 14, barMax, 44, 10, 'rgba(255,255,255,0.04)');
     const w = Math.max(4, barMax * pr);
     glow(g, col, i === 0 ? 24 : 8, () => fillRR(g, R.x + labelW, y + 14, w, 44, 10, withAlpha(col, 0.75)));
-    text(g, `${(pr * 100).toFixed(1)}%`, R.x + labelW + barMax + 20, y + 46, { size: 30, family: MONO, weight: 800, color: C.ink });
+    text(g, `${(pr * 100).toFixed(1)}%`, R.x + labelW + barMax + 20, y + 46, { size: 30, family: MONO, weight: 700, color: C.ink });
     text(g, `logit ${c.logit.toFixed(2)}`, R.x + labelW + barMax + 20, y + 72, { size: 15, family: MONO, color: C.dim });
   });
   const ry = top + cands.length * rowH;
@@ -568,21 +568,18 @@ export function viewLogits(g, R, s) {
   const gy = R.y + R.h - 40;
   const gx = R.x + labelW;
   const gw = barMax;
-  fillRR(g, gx, gy - 8, gw, 16, 8, 'rgba(255,255,255,0.06)');
   const tNorm = clamp01(T / 2);
-  const grad = g.createLinearGradient(gx, 0, gx + gw, 0);
-  grad.addColorStop(0, C.blue);
-  grad.addColorStop(0.5, C.violet);
-  grad.addColorStop(1, '#ff5a5a');
-  fillRR(g, gx, gy - 8, Math.max(16, gw * tNorm), 16, 8, grad);
-  glow(g, C.ink, 16, () => {
-    g.fillStyle = C.ink;
-    g.beginPath();
-    g.arc(gx + gw * tNorm, gy, 14, 0, Math.PI * 2);
-    g.fill();
-  });
+  g.fillStyle = 'rgba(255,255,255,0.12)';
+  g.fillRect(gx, gy - 2, gw, 4);
+  g.fillStyle = C.ink;
+  g.fillRect(gx, gy - 2, gw * tNorm, 4);
+  // tick at T = 1 (the model's raw distribution)
+  g.fillRect(gx + gw / 2 - 1, gy - 12, 2, 24);
+  g.beginPath();
+  g.arc(gx + gw * tNorm, gy, 12, 0, Math.PI * 2);
+  g.fill();
   text(g, `${s.S.screen.temp}`, gx - 20, gy + 8, { size: 22, family: SANS, color: C.dim, align: 'right' });
-  text(g, `T = ${T.toFixed(2)}`, gx + gw + 20, gy + 10, { size: 30, family: MONO, weight: 800, color: T < 0.05 ? C.blue : T > 1.3 ? '#ff6b6b' : C.ink });
+  text(g, `T = ${T.toFixed(2)}`, gx + gw + 20, gy + 10, { size: 30, family: MONO, weight: 700, color: T < 0.05 ? C.blue : T > 1.3 ? '#ff6b6b' : C.ink });
   if (T < 0.05) text(g, s.S.screen.greedy, gx, gy - 24, { size: 18, family: MONO, color: C.blue });
 }
 
@@ -688,7 +685,7 @@ export function viewGenerate(g, R, s) {
       const w = (side - 140) * rec.probs[i];
       fillRR(g, sx + 24, y + 28, side - 140, 14, 7, 'rgba(255,255,255,0.05)');
       fillRR(g, sx + 24, y + 28, Math.max(w, 4), 14, 7, withAlpha(col, chosen ? 0.95 : 0.45));
-      text(g, showToken(c.text).slice(0, 14), sx + 24, y + 20, { size: 20, family: MONO, weight: chosen ? 800 : 400, color: chosen ? C.ink : C.dim });
+      text(g, showToken(c.text).slice(0, 14), sx + 24, y + 20, { size: 20, family: MONO, weight: chosen ? 700 : 400, color: chosen ? C.ink : C.dim });
       text(g, `${Math.round(rec.probs[i] * 100)}%`, sx + side - 24, y + 42, { size: 20, family: MONO, align: 'right', color: chosen ? C.ink : C.dim });
       if (chosen) text(g, '◀', sx + side - 80, y + 42, { size: 18, color: col });
     });

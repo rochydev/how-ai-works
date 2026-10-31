@@ -24,7 +24,7 @@ function tileTexture(label, color) {
   g.globalAlpha = 1;
   g.shadowBlur = 10;
   g.fillStyle = '#ffffff';
-  g.font = "700 46px 'JetBrains Mono', monospace";
+  g.font = "600 46px 'IBM Plex Mono', monospace";
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   g.fillText(label.length > 10 ? `${label.slice(0, 9)}…` : label, 160, 60);

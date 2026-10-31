@@ -2,6 +2,7 @@ import { STAGES } from '../ai/stages.js';
 import '../styles/hud.css';
 
 const ICONS = {
+  logo: '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="15" width="6" height="4" fill="var(--accent)"/></svg>',
   prev: '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
   next: '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
   play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg>',
@@ -31,7 +32,7 @@ export class Hud {
     return `
       <header class="topbar">
         <div class="brand">
-          <div class="logo"><span></span></div>
+          <div class="logo">${ICONS.logo}</div>
           <div>
             <div class="brand-title" data-t="title"></div>
             <div class="brand-sub" data-t="subtitle"></div>
@@ -151,10 +152,10 @@ export class Hud {
     this.root.classList.toggle('composing', s.stage === 0 && !s.intro);
     this.root.dataset.stage = stage.id;
 
-    this.$('.panel-step').textContent = `${S.stage} ${s.stage + 1} ${S.of} ${STAGES.length}`;
+    this.$('.panel-step').textContent = `${S.stage} ${String(s.stage + 1).padStart(2, '0')} / ${STAGES.length}`;
     this.$('.panel-title').textContent = T.title;
     this.$('.panel-body').textContent = T.body;
-    this.$('.panel-fact b').textContent = `${S.fact} · `;
+    this.$('.panel-fact b').textContent = S.fact;
     this.$('.panel-fact span').textContent = T.fact;
 
     // stage-specific controls

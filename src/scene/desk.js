@@ -176,7 +176,7 @@ function createCodeMonitor(black, dark) {
   const draw = (scroll) => {
     g.fillStyle = '#0a0916';
     g.fillRect(0, 0, W, H);
-    g.font = "500 12px 'JetBrains Mono', monospace";
+    g.font = "500 12px 'IBM Plex Mono', monospace";
     const start = Math.floor(scroll / lineH);
     for (let i = -1; i < H / lineH + 1; i++) {
       const idx = start + i;
