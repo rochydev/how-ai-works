@@ -2,7 +2,10 @@ import { STAGES } from '../ai/stages.js';
 import '../styles/hud.css';
 
 const ICONS = {
-  logo: '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="15" width="6" height="4" fill="var(--accent)"/></svg>',
+  logo: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="currentColor"/><rect x="8" y="8" width="8" height="8" rx="2" fill="#1c1c1e"/></svg>',
+  appIcon: '<svg viewBox="0 0 64 64" fill="none" stroke-linecap="round"><path d="M16 22h32M16 32h22M16 42h12" stroke="#f5f5f7" stroke-width="4"/><rect x="34" y="38" width="12" height="8" rx="2" fill="#0a84ff"/></svg>',
+  search: '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>',
+  bubble: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
   prev: '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
   next: '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
   play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg>',
@@ -31,40 +34,44 @@ export class Hud {
   }
 
   template() {
+    const lights = '<span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>';
     return `
       <header class="topbar">
         <div class="brand">
-          <div class="logo">${ICONS.logo}</div>
-          <div>
-            <div class="brand-title" data-t="title"></div>
-            <div class="brand-sub" data-t="subtitle"></div>
-          </div>
+          <span class="logo">${ICONS.logo}</span>
+          <span class="brand-title" data-t="title"></span>
+          <nav class="views" role="group" aria-label="camera"></nav>
         </div>
         <div class="top-actions">
-          <div class="views" role="group" aria-label="camera"></div>
           <button class="icon-btn" data-action="music" aria-label="music"></button>
           <button class="icon-btn" data-action="sound" aria-label="sound"></button>
           <div class="lang" role="group" aria-label="language">
             <button data-lang="es">ES</button><button data-lang="en">EN</button>
           </div>
+          <span class="clock"></span>
         </div>
       </header>
 
-      <aside class="panel" aria-live="polite">
-        <div class="panel-step"></div>
-        <h2 class="panel-title"></h2>
-        <p class="panel-body"></p>
-        <div class="panel-controls"></div>
-        <div class="panel-fact"><b></b><span></span></div>
-        <div class="panel-progress"><i></i></div>
+      <aside class="panel window" aria-live="polite">
+        <div class="titlebar">${lights}<span class="panel-step"></span></div>
+        <div class="window-body">
+          <h2 class="panel-title"></h2>
+          <p class="panel-body"></p>
+          <div class="panel-controls"></div>
+          <div class="panel-fact"><b></b><span></span></div>
+          <div class="panel-progress"><i></i></div>
+        </div>
       </aside>
 
       <div class="composer">
         <form class="composer-box">
-          <input type="text" maxlength="160" autocomplete="off" spellcheck="false" />
-          <button type="submit" class="send" aria-label="send">${ICONS.send}</button>
+          <div class="spot-row">
+            ${ICONS.search}
+            <input type="text" maxlength="160" autocomplete="off" spellcheck="false" />
+            <button type="submit" class="send" aria-label="send">${ICONS.send}</button>
+          </div>
+          <div class="suggestions"></div>
         </form>
-        <div class="suggestions"></div>
       </div>
 
       <footer class="timeline">
@@ -79,12 +86,15 @@ export class Hud {
       <div class="hint"></div>
 
       <div class="intro">
-        <div class="intro-card">
-          <div class="intro-kicker">how · ai · works</div>
-          <h1 data-t="introLead"></h1>
-          <p data-t="introBody"></p>
-          <button class="intro-start" data-action="start"><span data-t="start"></span> →</button>
-          <small data-t="disclaimer"></small>
+        <div class="intro-card window">
+          <div class="titlebar">${lights}</div>
+          <div class="window-body">
+            <div class="app-icon">${ICONS.appIcon}</div>
+            <h1 data-t="introLead"></h1>
+            <p data-t="introBody"></p>
+            <button class="intro-start" data-action="start"><span data-t="start"></span></button>
+            <small data-t="disclaimer"></small>
+          </div>
         </div>
       </div>`;
   }
@@ -121,8 +131,19 @@ export class Hud {
       api.submit(input.value);
     });
     this.root.addEventListener('input', (e) => {
-      if (e.target.matches('[data-temp]')) api.setTemperature(Number(e.target.value));
+      if (!e.target.matches('[data-temp]')) return;
+      api.setTemperature(Number(e.target.value));
+      e.target.style.setProperty('--p', `${(e.target.value / 2) * 100}%`);
     });
+    // menu-bar clock, like the real thing
+    const tick = () => {
+      this.$('.clock').textContent = new Intl.DateTimeFormat(this.state.lang, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+        .format(new Date())
+        .replace(/,/g, '');
+    };
+    tick();
+    setInterval(tick, 15000);
+    this.tickClock = tick;
     // keyboard shortcuts outside the input
     window.addEventListener('keydown', (e) => {
       if (e.target.matches('input')) return;
@@ -156,7 +177,7 @@ export class Hud {
     this.root.classList.toggle('composing', s.stage === 0 && !s.intro);
     this.root.dataset.stage = stage.id;
 
-    this.$('.panel-step').textContent = `${S.stage} ${String(s.stage + 1).padStart(2, '0')} / ${STAGES.length}`;
+    this.$('.panel-step').textContent = `${S.stage} ${s.stage + 1} ${S.of} ${STAGES.length}`;
     this.$('.panel-title').textContent = T.title;
     this.$('.panel-body').textContent = T.body;
     this.$('.panel-fact b').textContent = S.fact;
@@ -168,7 +189,7 @@ export class Hud {
       controls += `
         <label class="ctrl">
           <span>${S.temperature} <output>${s.temperature.toFixed(2)}</output></span>
-          <input type="range" min="0" max="2" step="0.05" value="${s.temperature}" data-temp />
+          <input type="range" min="0" max="2" step="0.05" value="${s.temperature}" data-temp style="--p: ${(s.temperature / 2) * 100}%" />
         </label>`;
     }
     if (stage.id === 'attention') {
@@ -183,7 +204,7 @@ export class Hud {
     }
 
     this.$('.composer input').placeholder = S.placeholder;
-    this.$('.suggestions').innerHTML = S.suggestions.map((q, i) => `<button data-suggest="${i}">${esc(q)}</button>`).join('');
+    this.$('.suggestions').innerHTML = S.suggestions.map((q, i) => `<button type="button" data-suggest="${i}">${ICONS.bubble}<span>${esc(q)}</span></button>`).join('');
 
     this.$('.views').innerHTML = ['room', 'shoulder', 'screen', 'free']
       .map((v) => `<button data-view="${v}" class="${s.shot === v ? 'on' : ''}">${S.views[v]}</button>`)
@@ -209,6 +230,7 @@ export class Hud {
       b.disabled = i > 0 && !s.pipeline.prompt;
     });
     this.$('.hint').textContent = S.hint;
+    this.tickClock?.();
   }
 
   /** Per-frame bits that do not need a full re-render. */

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { STAGES } from '../ai/stages.js';
 import { VIEWS } from './views.js';
-import { C, MONO, SANS, SERIF, text, font, wrap, fillRR, strokeRR, withAlpha } from './draw.js';
+import { C, MONO, SANS, DISPLAY, text, font, wrap, rrect, fillRR, strokeRR, withAlpha } from './draw.js';
 
 export const SCREEN_W = 1920;
 export const SCREEN_H = 1080;
@@ -33,6 +33,29 @@ export class ScreenOS {
     this.pointer = null;
     this.acc = 0;
     this.vignette = this.makeVignette();
+    this.wallpaper = this.makeWallpaper();
+  }
+
+  /** Soft macOS-style wallpaper: a few large colour blooms on deep indigo. */
+  makeWallpaper() {
+    const c = document.createElement('canvas');
+    c.width = SCREEN_W;
+    c.height = SCREEN_H;
+    const g = c.getContext('2d');
+    g.fillStyle = '#141220';
+    g.fillRect(0, 0, SCREEN_W, SCREEN_H);
+    for (const [x, y, r, col] of [
+      [260, 980, 760, 'rgba(94,92,230,0.55)'],
+      [1560, 160, 820, 'rgba(191,90,242,0.38)'],
+      [1250, 1080, 640, 'rgba(10,132,255,0.32)'],
+    ]) {
+      const grad = g.createRadialGradient(x, y, 0, x, y, r);
+      grad.addColorStop(0, col);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, SCREEN_W, SCREEN_H);
+    }
+    return c;
   }
 
   makeVignette() {
@@ -85,23 +108,7 @@ export class ScreenOS {
     this.regions = [];
     const hit = (r) => this.regions.push(r);
 
-    g.fillStyle = C.bg;
-    g.fillRect(0, 0, SCREEN_W, SCREEN_H);
-    // wallpaper grid
-    g.strokeStyle = 'rgba(237,232,223,0.03)';
-    g.lineWidth = 1;
-    for (let x = 0; x < SCREEN_W; x += 48) {
-      g.beginPath();
-      g.moveTo(x, 0);
-      g.lineTo(x, SCREEN_H);
-      g.stroke();
-    }
-    for (let y = 0; y < SCREEN_H; y += 48) {
-      g.beginPath();
-      g.moveTo(0, y);
-      g.lineTo(SCREEN_W, y);
-      g.stroke();
-    }
+    g.drawImage(this.wallpaper, 0, 0);
 
     this.drawTopBar(g, s);
     this.drawChat(g, s);
@@ -110,42 +117,82 @@ export class ScreenOS {
     g.drawImage(this.vignette, 0, 0);
   }
 
+  /** macOS-style menu bar: app name and menus on the left, status items on the right. */
   drawTopBar(g, s) {
-    g.fillStyle = 'rgba(8,8,10,0.94)';
+    g.fillStyle = 'rgba(28,26,36,0.72)';
     g.fillRect(0, 0, SCREEN_W, 44);
-    g.fillStyle = C.line;
+    g.fillStyle = 'rgba(0,0,0,0.35)';
     g.fillRect(0, 44, SCREEN_W, 1);
-    text(g, 'neural.os', 24, 30, { size: 20, weight: 600, family: MONO, color: C.ink });
-    const stage = STAGES[s.stage];
-    text(g, `model: toy-llm-32d  ·  ${s.S.stages[stage.id].title}`, SCREEN_W / 2, 30, { size: 19, family: MONO, color: C.dim, align: 'center' });
+    // app glyph: a little rounded square
+    fillRR(g, 26, 12, 20, 20, 5, C.ink);
+    fillRR(g, 31, 17, 10, 10, 2, '#1c1a24');
+    let x = 66;
+    text(g, 'neural.os', x, 30, { size: 19, weight: 700 });
+    x += 112;
+    const menus = s.lang === 'en' ? ['File', 'Edit', 'View', 'Window', 'Help'] : ['Archivo', 'Edición', 'Visualización', 'Ventana', 'Ayuda'];
+    font(g, 19, 400, SANS);
+    for (const m of menus) {
+      text(g, m, x, 30, { size: 19 });
+      x += g.measureText(m).width + 30;
+    }
+
     const now = new Date();
-    const clock = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    text(g, clock, SCREEN_W - 24, 30, { size: 20, family: MONO, align: 'right' });
-    text(g, 'wifi  ·  76%', SCREEN_W - 110, 30, { size: 18, family: MONO, color: C.dim, align: 'right' });
+    const clock = new Intl.DateTimeFormat(s.lang, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(now).replace(/,/g, '');
+    let rx = SCREEN_W - 26;
+    text(g, clock, rx, 30, { size: 19, align: 'right' });
+    font(g, 19, 400, SANS);
+    rx -= g.measureText(clock).width + 34;
+    // battery
+    strokeRR(g, rx - 34, 15, 34, 16, 4, withAlpha(C.ink, 0.8), 1.5);
+    fillRR(g, rx - 31, 18, 22, 10, 2, C.ink);
+    fillRR(g, rx + 1, 20, 3, 6, 1, withAlpha(C.ink, 0.8));
+    rx -= 64;
+    // wi-fi: three arcs and a dot
+    g.strokeStyle = C.ink;
+    g.lineWidth = 2.6;
+    g.lineCap = 'round';
+    for (const r of [6, 11, 16]) {
+      g.beginPath();
+      g.arc(rx, 32, r, Math.PI * 1.25, Math.PI * 1.75);
+      g.stroke();
+    }
+    g.lineCap = 'butt';
+    g.fillStyle = C.ink;
+    g.beginPath();
+    g.arc(rx, 31, 2.4, 0, Math.PI * 2);
+    g.fill();
   }
 
-  windowFrame(g, R, title, accent) {
-    fillRR(g, R.x, R.y, R.w, R.h, 10, 'rgba(17,16,21,0.97)');
-    strokeRR(g, R.x, R.y, R.w, R.h, 10, C.line, 1.5);
-    g.fillStyle = C.line;
+  /** A macOS window: rounded, deep shadow, traffic lights and a centred title. */
+  windowFrame(g, R, title) {
+    g.save();
+    g.shadowColor = 'rgba(0,0,0,0.55)';
+    g.shadowBlur = 50;
+    g.shadowOffsetY = 18;
+    fillRR(g, R.x, R.y, R.w, R.h, 16, '#1e1e20');
+    g.restore();
+    g.save();
+    rrect(g, R.x, R.y, R.w, R.h, 16);
+    g.clip();
+    g.fillStyle = '#2a2a2d';
+    g.fillRect(R.x, R.y, R.w, 52);
+    g.fillStyle = 'rgba(0,0,0,0.5)';
     g.fillRect(R.x, R.y + 52, R.w, 1.5);
-    g.strokeStyle = withAlpha(C.dim, 0.6);
-    g.lineWidth = 1.5;
-    [0, 1, 2].forEach((i) => {
+    g.restore();
+    strokeRR(g, R.x, R.y, R.w, R.h, 16, 'rgba(255,255,255,0.12)', 1.5);
+    ['#ff5f57', '#febc2e', '#28c840'].forEach((c, i) => {
+      g.fillStyle = c;
       g.beginPath();
-      g.arc(R.x + 26 + i * 22, R.y + 26, 6, 0, Math.PI * 2);
-      g.stroke();
+      g.arc(R.x + 28 + i * 26, R.y + 26, 8, 0, Math.PI * 2);
+      g.fill();
     });
-    // the window's accent survives as a thin rule under the title bar
-    g.fillStyle = withAlpha(accent, 0.7);
-    g.fillRect(R.x + 24, R.y + 51, 56, 2.5);
-    text(g, title, R.x + 104, R.y + 33, { size: 20, family: MONO, color: C.dim });
+    text(g, title, R.x + R.w / 2, R.y + 33, { size: 19, weight: 600, color: C.dim, align: 'center' });
   }
 
   drawChat(g, s) {
     const R = CHAT;
     const S = s.S.screen;
-    this.windowFrame(g, R, `${S.chat}.app`, C.violet);
+    this.windowFrame(g, R, S.chat);
     const p = s.pipeline;
     const inner = { x: R.x + 22, y: R.y + 74, w: R.w - 44, h: R.h - 190 };
 
@@ -153,37 +200,38 @@ export class ScreenOS {
     const sent = s.stage > 0 && p.prompt;
     if (!sent) {
       text(g, s.lang === 'en' ? 'How can I help you?' : '¿En qué puedo ayudarte?', R.x + R.w / 2, R.y + R.h / 2 - 60, {
-        size: 46,
-        family: SERIF,
+        size: 40,
+        weight: 600,
+        family: DISPLAY,
         color: C.dim,
         align: 'center',
       });
     } else {
-      // user bubble
+      // user bubble, Messages-style
       font(g, 24, 400, SANS);
       const lines = wrap(g, p.prompt, inner.w - 120);
       const bw = Math.min(inner.w - 60, Math.max(...lines.map((l) => g.measureText(l).width)) + 40);
       const bh = lines.length * 32 + 30;
-      text(g, S.you, inner.x + inner.w, y + 10, { size: 16, family: MONO, color: C.dim, align: 'right' });
+      text(g, S.you, inner.x + inner.w - 8, y + 10, { size: 16, weight: 500, color: C.dim, align: 'right' });
       y += 22;
-      fillRR(g, inner.x + inner.w - bw, y, bw, bh, 12, 'rgba(237,232,223,0.11)');
-      lines.forEach((l, i) => text(g, l, inner.x + inner.w - bw + 20, y + 38 + i * 32, { size: 24 }));
+      fillRR(g, inner.x + inner.w - bw, y, bw, bh, 22, C.accent);
+      lines.forEach((l, i) => text(g, l, inner.x + inner.w - bw + 20, y + 38 + i * 32, { size: 24, color: '#ffffff' }));
       y += bh + 30;
 
       // assistant bubble
-      text(g, S.assistant, inner.x, y + 10, { size: 16, family: MONO, color: C.accent });
+      text(g, S.assistant, inner.x + 8, y + 10, { size: 16, weight: 500, color: C.dim });
       y += 22;
       const generating = s.stage >= 9;
       if (!generating) {
-        fillRR(g, inner.x, y, 190, 60, 12, 'rgba(255,255,255,0.05)');
+        fillRR(g, inner.x, y, 110, 60, 30, '#3a3a3c');
         for (let i = 0; i < 3; i++) {
-          const a = 0.3 + 0.7 * Math.max(0, Math.sin(s.t * 5 - i * 0.7));
+          const a = 0.35 + 0.65 * Math.max(0, Math.sin(s.t * 5 - i * 0.7));
           g.fillStyle = withAlpha(C.ink, a);
           g.beginPath();
-          g.arc(inner.x + 34 + i * 26, y + 30, 8, 0, Math.PI * 2);
+          g.arc(inner.x + 30 + i * 25, y + 30, 8, 0, Math.PI * 2);
           g.fill();
         }
-        text(g, S.thinking, inner.x + 118, y + 37, { size: 18, family: MONO, color: C.dim });
+        text(g, S.thinking, inner.x + 128, y + 37, { size: 18, color: C.dim });
       } else {
         font(g, 24, 400, SANS);
         const caret = s.stage === 9 && Math.floor(s.t * 3) % 2 === 0 ? '▌' : '';
@@ -191,7 +239,7 @@ export class ScreenOS {
         const maxLines = Math.floor((inner.y + inner.h - y - 30) / 32);
         const shown = out.slice(Math.max(0, out.length - maxLines));
         const bh2 = shown.length * 32 + 30;
-        fillRR(g, inner.x, y, inner.w - 20, bh2, 12, 'rgba(255,255,255,0.05)');
+        fillRR(g, inner.x, y, inner.w - 20, bh2, 22, '#3a3a3c');
         shown.forEach((l, i) => text(g, l, inner.x + 20, y + 38 + i * 32, { size: 24 }));
       }
     }
@@ -199,8 +247,8 @@ export class ScreenOS {
     // input box
     const ib = { x: R.x + 22, y: R.y + R.h - 96, w: R.w - 44, h: 70 };
     const active = s.stage === 0;
-    fillRR(g, ib.x, ib.y, ib.w, ib.h, 10, 'rgba(255,255,255,0.03)');
-    strokeRR(g, ib.x, ib.y, ib.w, ib.h, 10, active ? withAlpha(C.ink, 0.45) : C.line, 1.5);
+    fillRR(g, ib.x, ib.y, ib.w, ib.h, ib.h / 2, 'rgba(255,255,255,0.04)');
+    strokeRR(g, ib.x, ib.y, ib.w, ib.h, ib.h / 2, active ? 'rgba(255,255,255,0.28)' : C.line, 1.5);
     if (active) {
       const caret = Math.floor(s.t * 2.5) % 2 === 0 ? '▌' : ' ';
       font(g, 24, 400, SANS);
@@ -208,10 +256,10 @@ export class ScreenOS {
       while (shown && g.measureText(shown + caret).width > ib.w - 90) shown = shown.slice(1);
       text(g, s.typed ? shown + caret : caret, ib.x + 22, ib.y + 44, { size: 24, color: s.typed ? C.ink : C.dim });
       if (!s.typed) text(g, s.S.placeholder, ib.x + 46, ib.y + 44, { size: 22, color: C.faint });
-      fillRR(g, ib.x + ib.w - 58, ib.y + 13, 44, 44, 8, s.typed ? C.ink : 'rgba(255,255,255,0.08)');
-      text(g, '↑', ib.x + ib.w - 36, ib.y + 46, { size: 26, weight: 600, align: 'center', color: s.typed ? C.bg : C.dim });
+      fillRR(g, ib.x + ib.w - 58, ib.y + 13, 44, 44, 22, s.typed ? C.accent : 'rgba(255,255,255,0.1)');
+      text(g, '↑', ib.x + ib.w - 36, ib.y + 46, { size: 26, weight: 700, align: 'center', color: s.typed ? '#ffffff' : C.dim });
     } else {
-      text(g, `✓ ${S.sent}`, ib.x + 22, ib.y + 44, { size: 22, family: MONO, color: C.dim });
+      text(g, `✓ ${S.sent}`, ib.x + 26, ib.y + 44, { size: 21, color: C.dim });
     }
   }
 
@@ -219,8 +267,7 @@ export class ScreenOS {
     const R = INSPECT;
     const stage = STAGES[s.stage];
     const n = String(s.stage + 1).padStart(2, '0');
-    this.windowFrame(g, R, `model.inspect()  —  ${n}/${STAGES.length}`, C.cyan);
-    text(g, s.S.stages[stage.id].title, R.x + R.w - 28, R.y + 38, { size: 36, family: SERIF, color: C.ink, align: 'right' });
+    this.windowFrame(g, R, `${s.S.stages[stage.id].title}  —  model.inspect()  ${n}/${STAGES.length}`);
 
     const view = VIEWS[stage.id];
     if (view && (stage.id === 'prompt' || s.pipeline.prompt)) {
@@ -248,4 +295,4 @@ export class ScreenOS {
   }
 }
 
-export { SANS, MONO, SERIF };
+export { SANS, MONO, DISPLAY };

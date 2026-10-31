@@ -1,16 +1,17 @@
-export const MONO = "'IBM Plex Mono', ui-monospace, monospace";
-export const SANS = "'IBM Plex Sans', 'Helvetica Neue', sans-serif";
-export const SERIF = "'Instrument Serif', 'Times New Roman', serif";
+// macOS system fonts (SF Pro / SF Mono); Inter and Roboto Mono stand in elsewhere
+export const SANS = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Helvetica Neue', sans-serif";
+export const DISPLAY = "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif";
+export const MONO = "ui-monospace, 'SF Mono', Menlo, 'Roboto Mono', monospace";
 
 export const C = {
-  bg: '#0b0a10',
-  panel: '#131217',
-  panel2: '#1a191f',
-  line: 'rgba(237,232,223,0.12)',
-  ink: '#ede8df',
-  dim: '#9a958c',
-  faint: '#55524c',
-  accent: '#e8a25a',
+  bg: '#1e1e20',
+  panel: '#2a2a2d',
+  panel2: '#323236',
+  line: 'rgba(255,255,255,0.1)',
+  ink: '#f5f5f7',
+  dim: '#98989d',
+  faint: '#5a5a5f',
+  accent: '#0a84ff',
   violet: '#b26bff',
   cyan: '#25f4ee',
   pink: '#ff4fd8',

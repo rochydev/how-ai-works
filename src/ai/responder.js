@@ -34,29 +34,29 @@ function topicOf(text, lang) {
 const BANK = {
   es: {
     poem: (topic) =>
-      `Escribes «${topic}» y se rompe en tokens,\nviaja entre capas de pura atención,\ny palabra a palabra, sin saber por qué,\nnace un poema hecho de predicción. ✨`,
+      `Escribes «${topic}» y se rompe en tokens,\nviaja entre capas de pura atención,\ny palabra a palabra, sin saber por qué,\nnace un poema hecho de predicción.`,
     joke: () =>
-      '¿Por qué el programador dejó su trabajo? Porque no le daban arrays. 😄 Y sí: elegí ese final token a token, por probabilidad.',
+      '¿Por qué el programador dejó su trabajo? Porque no le daban arrays. Y sí: elegí ese final token a token, por probabilidad.',
     code: () =>
       'Claro, aquí tienes:\n\nprint("Hola, mundo")\n\nUna línea de Python generada igual que el texto: «print», «(», «"Hola»… token a token.',
     ai: () =>
       'Soy un modelo de lenguaje: he leído muchísimo texto y aprendí a predecir el siguiente token. Repetir esa predicción una y otra vez es lo que parece pensar.',
     greet: () =>
-      '¡Hola! 👋 No leo como tú: troceo tu texto en tokens, los convierto en vectores y predigo, uno a uno, cuál es el siguiente más probable.',
+      '¡Hola! No leo como tú: troceo tu texto en tokens, los convierto en vectores y predigo, uno a uno, cuál es el siguiente más probable.',
     default: (topic, n) =>
       `Buena pregunta sobre «${topic}». Para responder, convertí tu mensaje en ${n} tokens, los pasé por muchas capas de atención y elegí cada palabra por probabilidad.`,
   },
   en: {
     poem: (topic) =>
-      `You type "${topic}" and it breaks into tokens,\nit travels through layers of attention and light,\nand word after word, not knowing why,\na poem is born out of prediction. ✨`,
+      `You type "${topic}" and it breaks into tokens,\nit travels through layers of attention and light,\nand word after word, not knowing why,\na poem is born out of prediction.`,
     joke: () =>
-      "Why did the programmer quit their job? Because they didn't get arrays. 😄 And yes: I picked that punchline token by token, by probability.",
+      "Why did the programmer quit their job? Because they didn't get arrays. And yes: I picked that punchline token by token, by probability.",
     code: () =>
       'Sure, here you go:\n\nprint("Hello, world")\n\nOne line of Python, generated just like text: "print", "(", "\\"Hello"… token by token.',
     ai: () =>
       "I'm a language model: I read a huge amount of text and learned to predict the next token. Repeating that prediction over and over is what looks like thinking.",
     greet: () =>
-      "Hi! 👋 I don't read like you do: I split your text into tokens, turn them into vectors and predict, one by one, the most likely next token.",
+      "Hi! I don't read like you do: I split your text into tokens, turn them into vectors and predict, one by one, the most likely next token.",
     default: (topic, n) =>
       `Good question about "${topic}". To answer, I turned your message into ${n} tokens, ran them through many attention layers and picked every word by probability.`,
   },
