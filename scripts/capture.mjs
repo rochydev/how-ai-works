@@ -31,7 +31,8 @@ const q = (o) => `/?${new URLSearchParams(o).toString()}`;
 
 const SHOTS = [
   { name: '00-hero', url: q({ lang: 'es', prompt: PROMPT_ES, stage: 'attention', paused: '', ui: '0', shot: 'holo' }), wait: 7000 },
-  { name: '01-intro', url: q({ lang: 'es' }), wait: 5000 },
+  { name: '00b-welcome', url: q({ lang: 'es' }), wait: 2300 },
+  { name: '01-intro', url: q({ lang: 'es', splash: '0' }), wait: 5000 },
   { name: '02-prompt', url: q({ lang: 'es', autoplay: '1' }), wait: 3200 },
   { name: '03-tokens', url: q({ lang: 'es', prompt: PROMPT_ES, stage: 'tokens', paused: '' }), wait: 6000 },
   { name: '04-ids', url: q({ lang: 'es', prompt: PROMPT_ES, stage: 'ids', paused: '' }), wait: 5500 },

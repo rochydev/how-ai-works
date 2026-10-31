@@ -729,6 +729,26 @@ input[type='range']::-moz-range-thumb {
   line-height: 1.45;
 }
 
+#hud a {
+  pointer-events: auto;
+}
+
+.intro-credit {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.intro-credit a {
+  color: var(--ink-dim);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.intro-credit a:hover {
+  color: var(--accent);
+}
+
 @keyframes rise {
   from {
     opacity: 0;
