@@ -72,6 +72,10 @@ export function createParticles({ mugTop }) {
         p[i * 3 + 1] += Math.sin(t * 0.21 + k * 2) * dt * 0.015 - dt * 0.004;
         p[i * 3 + 2] += Math.cos(t * 0.17 + k) * dt * 0.02;
         if (p[i * 3 + 1] < 0) p[i * 3 + 1] = 2.8;
+        // keep the air in front of the monitor clear: the close-up camera lives there
+        if (Math.abs(p[i * 3]) < 0.75 && p[i * 3 + 1] > 0.8 && p[i * 3 + 1] < 1.7 && p[i * 3 + 2] < -1.2 && p[i * 3 + 2] > -2.3) {
+          p[i * 3 + 2] = -1.2;
+        }
       }
       dustGeo.attributes.position.needsUpdate = true;
 

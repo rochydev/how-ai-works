@@ -66,10 +66,15 @@ export class Director {
     switch (name) {
       case 'room':
         return { pos: new THREE.Vector3(2.55, 1.9, 1.95), target: new THREE.Vector3(-0.15, 1.0, -1.55), fov: aspect < 1 ? 70 : 46 };
-      case 'shoulder':
-        return { pos: new THREE.Vector3(0.55, 1.86, -0.2), target: new THREE.Vector3(0.1, 0.98, -2.2), fov: aspect < 1 ? 64 : 42 };
-      case 'holo':
-        return { pos: new THREE.Vector3(1.15, 1.74, -0.25), target: new THREE.Vector3(0.36, 1.42, -2.05), fov: aspect < 1 ? 72 : 50 };
+      case 'shoulder': {
+        const k = Math.min(1, this.layout.panelRight / 0.26);
+        return { pos: new THREE.Vector3(0.4 + 0.15 * k, 1.86, -0.2), target: new THREE.Vector3(0.1 * k, 0.98, -2.2), fov: aspect < 1 ? 64 : 42 };
+      }
+      case 'holo': {
+        // lean the framing left only when the side panel takes the right of the view
+        const k = Math.min(1, this.layout.panelRight / 0.26);
+        return { pos: new THREE.Vector3(0.8 + 0.35 * k, 1.74, -0.25), target: new THREE.Vector3(0.36 * k, 1.42, -2.05), fov: aspect < 1 ? 72 : 50 };
+      }
       case 'screen':
         return this.screenShot();
       default:

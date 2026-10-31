@@ -58,7 +58,7 @@ export class Pipeline {
       ...this.planned.slice(cursor + 1, cursor + 10).map((t) => t.text).filter((t) => /^[\s\p{P}]/u.test(t)),
     ];
     const seen = new Set([truth.text]);
-    const truthLogit = continuation ? 9.5 : cursor === 0 ? 6 + r() * 0.4 : 7.2 + r() * 0.6;
+    const truthLogit = continuation ? 9.5 : cursor === 0 ? 6 + r() * 0.4 : 7.6 + r() * 0.5;
     const list = [{ ...truth, truth: true, logit: truthLogit }];
     const base = [4.3, 3.7, 3.2, 2.7, 2.3];
     let guard = 0;
