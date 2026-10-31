@@ -1,4 +1,5 @@
 import { STAGES } from '../ai/stages.js';
+import { AUTHOR, AUTHOR_URL } from './welcome.js';
 import '../styles/hud.css';
 
 const ICONS = {
@@ -94,6 +95,7 @@ export class Hud {
             <p data-t="introBody"></p>
             <button class="intro-start" data-action="start"><span data-t="start"></span></button>
             <small data-t="disclaimer"></small>
+            <div class="intro-credit"><span data-t="developedBy"></span> <a href="${AUTHOR_URL}" target="_blank" rel="noopener">@${AUTHOR}</a></div>
           </div>
         </div>
       </div>`;

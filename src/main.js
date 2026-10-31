@@ -12,6 +12,7 @@ import { createCharacter } from './scene/character.js';
 import { createHolo } from './scene/holo.js';
 import { ScreenOS } from './screen/ScreenOS.js';
 import { Hud } from './ui/hud.js';
+import { showWelcome } from './ui/welcome.js';
 import { STAGES } from './ai/stages.js';
 import { detectUiLang } from './i18n.js';
 
@@ -73,7 +74,7 @@ engine.onUpdate((dt, t) => director.update(dt, t));
 engine.onUpdate((dt, t) => experience.update(dt, t));
 
 // ---- URL parameters (handy for demos, recordings and screenshots) ----------
-//   ?lang=en  ?prompt=Hello  ?stage=attention  ?autoplay  ?paused  ?ui=0  ?temp=1.2  ?shot=room
+//   ?lang=en  ?prompt=Hello  ?stage=attention  ?autoplay  ?paused  ?ui=0  ?temp=1.2  ?shot=room  ?splash=0
 if (params.has('temp')) experience.setTemperature(Number(params.get('temp')));
 if (params.get('ui') === '0') document.getElementById('hud').style.display = 'none';
 const startPrompt = params.get('prompt');
@@ -98,4 +99,6 @@ window.__haw = { experience, director, engine };
 
 engine.start();
 progress(1);
+// the welcome splash only greets people arriving at the intro, not deep links
+if (experience.state.intro && params.get('splash') !== '0') showWelcome(experience.state.S);
 setTimeout(() => document.getElementById('loader').classList.add('hidden'), 250);

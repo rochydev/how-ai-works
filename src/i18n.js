@@ -7,6 +7,9 @@ export const STRINGS = {
     introBody:
       'Escribe un mensaje y sigue su viaje dentro de un modelo de lenguaje: tokens, vectores, atención, probabilidades… hasta que la respuesta aparece en pantalla.',
     start: 'Empezar',
+    hello: 'hola',
+    welcome: 'Te damos la bienvenida a «Cómo funciona una IA»',
+    developedBy: 'Desarrollado por',
     disclaimer: 'Simulación educativa: tokenizador y pesos de juguete, pero las operaciones son las reales.',
     placeholder: 'Escribe tu prompt y pulsa Enter…',
     send: 'Enviar',
@@ -140,6 +143,9 @@ export const STRINGS = {
     introBody:
       'Write a message and follow its journey inside a language model: tokens, vectors, attention, probabilities… until the answer shows up on screen.',
     start: 'Start',
+    hello: 'hello',
+    welcome: 'Welcome to “How AI Works”',
+    developedBy: 'Developed by',
     disclaimer: 'Educational simulation: toy tokenizer and weights, but the operations are the real ones.',
     placeholder: 'Type your prompt and press Enter…',
     send: 'Send',

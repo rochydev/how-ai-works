@@ -1,0 +1,95 @@
+#welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: grid;
+  place-items: center;
+  background: #000;
+  cursor: default;
+  transition: opacity 0.9s ease, visibility 0.9s;
+}
+
+#welcome.out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.welcome-inner {
+  text-align: center;
+  padding: 0 24px;
+}
+
+.welcome-hello {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(88px, 15vw, 190px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+}
+
+/* letters arrive one by one, out of a soft blur */
+.welcome-hello span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(18px);
+  animation: welcome-letter 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(0.15s + var(--i) * 0.12s);
+}
+
+.welcome-line,
+.welcome-credit {
+  margin: 0;
+  opacity: 0;
+  animation: welcome-fade 0.8s ease forwards;
+}
+
+.welcome-line {
+  margin-top: 22px;
+  font-size: clamp(17px, 2vw, 22px);
+  color: var(--ink-dim);
+  animation-delay: 0.9s;
+}
+
+.welcome-credit {
+  margin-top: 56px;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  animation-delay: 1.4s;
+}
+
+.welcome-credit a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.welcome-credit a:hover {
+  color: var(--accent);
+}
+
+@keyframes welcome-letter {
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes welcome-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-hello span,
+  .welcome-line,
+  .welcome-credit {
+    animation-duration: 0.01s;
+    animation-delay: 0s;
+  }
+}
