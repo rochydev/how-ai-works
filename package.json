@@ -1,0 +1,30 @@
+{
+  "name": "how-ai-works",
+  "version": "1.0.0",
+  "description": "Interactive 3D visualization of how a Large Language Model turns a prompt into an answer — tokenization, embeddings, attention, sampling — all happening on a PC screen inside a neon bedroom.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "capture": "node scripts/capture.mjs"
+  },
+  "keywords": [
+    "threejs",
+    "llm",
+    "transformer",
+    "tokenization",
+    "attention",
+    "visualization",
+    "webgl"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.48.2",
+    "vite": "^5.4.10"
+  }
+}
