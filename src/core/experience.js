@@ -19,7 +19,7 @@ export class Experience {
       t: 0,
       typed: '',
       pipeline: new Pipeline(),
-      temperature: 0.7,
+      temperature: 0.6,
       head: 0,
       focus: null,
       speed: 1,

@@ -69,7 +69,7 @@ export function createHolo() {
       void main(){
         float fade = smoothstep(1.0, 0.0, vUv.y) * 0.5;
         float lines = 0.6 + 0.4 * sin(vUv.y * 80.0 - uTime * 6.0);
-        gl_FragColor = vec4(vec3(0.15, 0.85, 1.0) * lines, fade * uAlpha * 0.16);
+        gl_FragColor = vec4(vec3(0.15, 0.85, 1.0) * lines, fade * uAlpha * 0.09);
       }`,
   });
   const beam = new THREE.Mesh(beamGeo, beamMat);
