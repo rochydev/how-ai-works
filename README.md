@@ -8,10 +8,10 @@ Una experiencia 3D interactiva que sigue tu prompt **dentro de un modelo de leng
 tokens, vectores, atención, probabilidades… hasta que la respuesta aparece en pantalla.
 Todo ocurre en el monitor de un PC, en una habitación con LEDs, mientras alguien teclea.
 
-[![Demo](https://img.shields.io/badge/demo-en%20vivo-b26bff?style=for-the-badge)](https://rochydev.github.io/how-ai-works/)
-[![Three.js](https://img.shields.io/badge/three.js-r169-25f4ee?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org)
-[![Vite](https://img.shields.io/badge/vite-5-ff4fd8?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![License: MIT](https://img.shields.io/badge/license-MIT-ffb547?style=for-the-badge)](LICENSE)
+[![Demo](https://img.shields.io/badge/demo-en%20vivo-1c1b1f?style=flat-square)](https://rochydev.github.io/how-ai-works/)
+[![Three.js](https://img.shields.io/badge/three.js-r169-1c1b1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
+[![Vite](https://img.shields.io/badge/vite-5-1c1b1f?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1c1b1f?style=flat-square)](LICENSE)
 
 ![Hero: la habitación con el holograma de atención sobre el monitor](docs/screenshots/00-hero.png)
 
@@ -21,7 +21,7 @@ Todo ocurre en el monitor de un PC, en una habitación con LEDs, mientras alguie
 
 ---
 
-## ✨ Qué es
+## Qué es
 
 `how-ai-works` es una visualización educativa hecha con **Three.js** que explica, paso a paso, el
 recorrido completo de un prompt en un LLM (tipo GPT/Claude/Llama):
@@ -39,7 +39,7 @@ recorrido completo de un prompt en un LLM (tipo GPT/Claude/Llama):
 > codificación posicional sinusoidal, atención escalada con máscara causal, softmax con temperatura
 > y muestreo autorregresivo top-k.
 
-## 🧭 El viaje de un prompt (11 etapas)
+## El viaje de un prompt (11 etapas)
 
 | | |
 |:--:|:--:|
@@ -58,9 +58,9 @@ recorrido completo de un prompt en un LLM (tipo GPT/Claude/Llama):
 | ![Respuesta](docs/screenshots/12-answer.png) | ![Habitación](docs/screenshots/13-room.png) |
 | **11 · Respuesta** — detokenización y estadísticas | **Vista habitación** — la escena completa con el holograma de capas |
 
-🎬 Vídeo del recorrido completo (para redes): [`docs/video/walkthrough-es.webm`](docs/video/walkthrough-es.webm)
+Vídeo del recorrido completo (para redes): [`docs/video/walkthrough-es.webm`](docs/video/walkthrough-es.webm)
 
-## 🎮 Interacción
+## Interacción
 
 - **Escribe tu propio prompt** o usa las sugerencias (poema, chiste, código, “¿qué es la IA?”…).
 - **Temperatura** en directo: a 0 el modelo es *greedy*; por encima de 1.3 empieza a desvariar
@@ -70,16 +70,20 @@ recorrido completo de un prompt en un LLM (tipo GPT/Claude/Llama):
 - **Cámara**: Habitación · Hombro · Pantalla · Libre (arrastra para orbitar, rueda para zoom).
   Haz clic en el monitor para acercarte.
 - **Timeline**: salta a cualquier etapa, pausa, ½× / 1× / 2×, reinicia con otro prompt.
-- **Bilingüe** ES / EN y **sonido sintetizado** (teclas mecánicas, lluvia, pad ambiental).
+- **Bilingüe** ES / EN.
+- **Música de fondo lo-fi** generada en directo (piano eléctrico, bajo, escobillas y crujido de vinilo,
+  nunca suena igual dos veces) y **sonido sintetizado** (teclas mecánicas, lluvia). Cada uno tiene su
+  botón en la barra superior.
 - **Responsive**: en móvil el panel pasa a la parte inferior y la cámara se reencuadra.
 
 <p align="center"><img src="docs/screenshots/16-mobile.png" width="280" alt="Vista móvil" /></p>
 
-## 🛠️ Stack y arquitectura
+## Stack y arquitectura
 
 - **Three.js r169** (WebGL) + post-procesado `UnrealBloomPass` para el neón.
-- **Vite 5**, JavaScript vanilla con módulos ES. Sin frameworks, sin assets externos:
-  **todo es procedural** (geometría, texturas en canvas, sonido con WebAudio).
+- **Vite 5**, JavaScript vanilla con módulos ES. Sin frameworks ni assets: **todo es procedural**
+  (geometría, texturas en canvas, música y sonido con WebAudio).
+- Tipografía: **Instrument Serif**, **IBM Plex Sans** e **IBM Plex Mono** (Google Fonts).
 - **Playwright-core** solo para generar las capturas y el vídeo de la documentación.
 
 ```
@@ -104,8 +108,9 @@ src/
 │   ├── engine.js      renderer, bloom, bucle
 │   ├── director.js    planos de cámara, transiciones, parallax, órbita libre, lens shift
 │   ├── experience.js  el director de orquesta: estado, autoplay, generación, picking UV
-│   └── audio.js       sonido 100 % sintetizado
-└── ui/hud.js      HUD en HTML/CSS (glassmorphism)
+│   ├── audio.js       efectos y ambiente 100 % sintetizados
+│   └── music.js       música lo-fi generativa (FM, reverb, delay, batería)
+└── ui/hud.js      HUD en HTML/CSS
 ```
 
 Detalles que quizá te interesen:
@@ -120,7 +125,7 @@ Detalles que quizá te interesen:
 - **Continuaciones casi deterministas**: igual que en un LLM real, terminar una palabra (`predec` → `ir`)
   tiene una probabilidad altísima; la temperatura afecta sobre todo al inicio de palabras.
 
-## 🚀 Ejecutar en local
+## Ejecutar en local
 
 ```bash
 npm install
@@ -164,7 +169,7 @@ npm run capture
 npm run capture -- --video
 ```
 
-## 🌐 Despliegue
+## Despliegue
 
 El workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) compila y publica en
 **GitHub Pages** en cada push a `main`. Solo hay que activar *Settings → Pages → Source: GitHub Actions*.
@@ -173,7 +178,7 @@ El workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) compi
 
 <a id="english"></a>
 
-## 🇬🇧 English
+## English
 
 **how-ai-works** is an interactive 3D walkthrough of what happens inside a language model, from the moment
 you type a prompt until the answer appears. A procedural character types on a PC in a neon-lit bedroom;
@@ -185,7 +190,8 @@ self-attention (4 heads, causal mask) → transformer blocks → logits & softma
 sampling → autoregressive loop → detokenized answer.
 
 It is an **honest simulation**: the tokenizer and weights are toys, but the operations are the real ones.
-Everything is procedural (geometry, canvas textures, WebAudio sound), with no external assets.
+Everything is procedural (geometry, canvas textures, generative lo-fi music and sound in WebAudio),
+with no external assets.
 Switch the UI language with the **ES / EN** toggle or `?lang=en`.
 
 ```bash
@@ -196,6 +202,6 @@ npm install
 npm run dev
 ```
 
-## 📄 Licencia / License
+## Licencia / License
 
 [MIT](LICENSE) © 2026 rochydev
