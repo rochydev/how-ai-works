@@ -26,6 +26,7 @@ export class Experience {
       playing: true,
       shot: 'room',
       sound: audio.enabled,
+      music: audio.musicEnabled,
       cameraPosition: engine.camera.position,
       actions: {
         setHead: (h) => this.setHead(h),
@@ -219,6 +220,13 @@ export class Experience {
     this.audio.unlock();
     this.state.sound = !this.state.sound;
     this.audio.setEnabled(this.state.sound);
+    this.hud.render();
+  }
+
+  toggleMusic() {
+    this.audio.unlock();
+    this.state.music = !this.state.music;
+    this.audio.setMusic(this.state.music);
     this.hud.render();
   }
 
