@@ -22,12 +22,14 @@ progress(0.1);
 // Canvas textures need the web fonts ready before they are drawn
 await Promise.race([
   Promise.all([
-    document.fonts.load("italic 700 40px 'Space Grotesk'"),
-    document.fonts.load("700 40px 'Space Grotesk'"),
-    document.fonts.load("400 20px 'Space Grotesk'"),
-    document.fonts.load("800 20px 'JetBrains Mono'"),
-    document.fonts.load("600 20px 'JetBrains Mono'"),
-    document.fonts.load("400 20px 'JetBrains Mono'"),
+    document.fonts.load("italic 400 40px 'Instrument Serif'"),
+    document.fonts.load("400 40px 'Instrument Serif'"),
+    document.fonts.load("700 40px 'IBM Plex Sans'"),
+    document.fonts.load("600 40px 'IBM Plex Sans'"),
+    document.fonts.load("400 20px 'IBM Plex Sans'"),
+    document.fonts.load("700 20px 'IBM Plex Mono'"),
+    document.fonts.load("600 20px 'IBM Plex Mono'"),
+    document.fonts.load("400 20px 'IBM Plex Mono'"),
   ]),
   new Promise((resolve) => setTimeout(resolve, 2500)),
 ]);

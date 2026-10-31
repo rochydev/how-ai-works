@@ -1,15 +1,16 @@
 :root {
-  --bg: #07060f;
-  --ink: #ece9ff;
-  --ink-dim: #a29fc4;
-  --violet: #b26bff;
-  --cyan: #25f4ee;
-  --pink: #ff4fd8;
-  --amber: #ffb547;
-  --glass: rgba(16, 13, 34, 0.62);
-  --glass-border: rgba(178, 107, 255, 0.28);
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --sans: 'Space Grotesk', system-ui, sans-serif;
+  --bg: #0c0b0d;
+  --ink: #ede8df;
+  --ink-dim: #a39e94;
+  --ink-faint: #6d6961;
+  --accent: #e8a25a;
+  --line: rgba(237, 232, 223, 0.14);
+  --line-strong: rgba(237, 232, 223, 0.32);
+  --surface: rgba(14, 13, 16, 0.84);
+  --surface-solid: #141316;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 * {
@@ -44,7 +45,7 @@ body {
   inset: 0;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 50% 40%, #1a1036 0%, var(--bg) 70%);
+  background: var(--bg);
   z-index: 100;
   transition: opacity 0.8s ease, visibility 0.8s;
 }
@@ -56,26 +57,23 @@ body {
 
 .loader-inner {
   text-align: center;
-  font-family: var(--mono);
 }
 
 .loader-logo {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 18px var(--violet);
+  font-family: var(--serif);
+  font-size: 40px;
+  letter-spacing: -0.01em;
 }
 
-.loader-logo span {
-  color: var(--cyan);
+.loader-logo em {
+  color: var(--accent);
 }
 
 .loader-bar {
-  width: 240px;
-  height: 4px;
-  margin: 22px auto 12px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  width: 200px;
+  height: 1px;
+  margin: 20px auto 14px;
+  background: var(--line);
   overflow: hidden;
 }
 
@@ -83,12 +81,14 @@ body {
   display: block;
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, var(--violet), var(--cyan));
-  box-shadow: 0 0 12px var(--cyan);
+  background: var(--ink);
   transition: width 0.3s ease;
 }
 
 .loader-text {
-  font-size: 12px;
-  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }

@@ -1,14 +1,16 @@
-export const MONO = "'JetBrains Mono', ui-monospace, monospace";
-export const SANS = "'Space Grotesk', system-ui, sans-serif";
+export const MONO = "'IBM Plex Mono', ui-monospace, monospace";
+export const SANS = "'IBM Plex Sans', 'Helvetica Neue', sans-serif";
+export const SERIF = "'Instrument Serif', 'Times New Roman', serif";
 
 export const C = {
-  bg: '#0b0a18',
-  panel: '#12102a',
-  panel2: '#181538',
-  line: 'rgba(178,107,255,0.22)',
-  ink: '#ece9ff',
-  dim: '#8d89b8',
-  faint: '#4b4775',
+  bg: '#0b0a10',
+  panel: '#131217',
+  panel2: '#1a191f',
+  line: 'rgba(237,232,223,0.12)',
+  ink: '#ede8df',
+  dim: '#9a958c',
+  faint: '#55524c',
+  accent: '#e8a25a',
   violet: '#b26bff',
   cyan: '#25f4ee',
   pink: '#ff4fd8',
@@ -88,7 +90,8 @@ export function wrap(g, str, maxWidth) {
 export function glow(g, color, blur, fn) {
   g.save();
   g.shadowColor = color;
-  g.shadowBlur = blur;
+  // kept subtle on purpose: highlights, not neon
+  g.shadowBlur = blur * 0.4;
   fn();
   g.restore();
 }
