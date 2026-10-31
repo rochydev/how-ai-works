@@ -8,6 +8,8 @@ Una experiencia 3D interactiva que sigue tu prompt **dentro de un modelo de leng
 tokens, vectores, atención, probabilidades… hasta que la respuesta aparece en pantalla.
 Todo ocurre en el monitor de un PC, en una habitación con LEDs, mientras alguien teclea.
 
+Desarrollado por [@rochydev](https://github.com/rochydev).
+
 [![Demo](https://img.shields.io/badge/demo-en%20vivo-1c1b1f?style=flat-square)](https://rochydev.github.io/how-ai-works/)
 [![Three.js](https://img.shields.io/badge/three.js-r169-1c1b1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 [![Vite](https://img.shields.io/badge/vite-5-1c1b1f?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
@@ -40,6 +42,8 @@ recorrido completo de un prompt en un LLM (tipo GPT/Claude/Llama):
 > y muestreo autorregresivo top-k.
 
 ## El viaje de un prompt (11 etapas)
+
+<p align="center"><img src="docs/screenshots/00b-welcome.png" width="640" alt="Pantalla de bienvenida" /><br /><sub>Al entrar: bienvenida y créditos, y la escena aparece detrás.</sub></p>
 
 | | |
 |:--:|:--:|
@@ -158,6 +162,7 @@ npm run preview
 | `temp` | `&temp=1.4` | Temperatura inicial |
 | `shot` | `&shot=room` | Plano inicial: `room`, `shoulder`, `screen`, `holo` |
 | `ui` | `&ui=0` | Oculta el HUD (capturas limpias) |
+| `splash` | `?splash=0` | Salta la pantalla de bienvenida |
 
 ### Regenerar capturas y vídeo
 
